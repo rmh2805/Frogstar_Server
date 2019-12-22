@@ -3,10 +3,10 @@ package Server;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class Acceptor implements Runnable {
+public class AcceptorThread implements Runnable {
     ServerSocket serverSocket;
 
-    public Acceptor (int port) {
+    public AcceptorThread(int port) {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {

@@ -1,4 +1,4 @@
-package Protocols.From_Server;
+package Protocols.From_Server.Errors;
 
 import Protocols.FrogstarMessage;
 

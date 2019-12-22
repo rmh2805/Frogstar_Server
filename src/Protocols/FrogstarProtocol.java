@@ -9,8 +9,11 @@ public class FrogstarProtocol {
 
     //=========================<Headers From Server>==========================//
     public static final String acceptNameHead = "AcceptName";
+
+    //============================<Server Errors>=============================//
     public static final String nameTakenHead = "NameTaken";
     public static final String invalidNameHead = "InvalidName";
+    public static final String notLoggedOnHead = "MustSignIn";
 
     //============================<Shared Headers>============================//
 
