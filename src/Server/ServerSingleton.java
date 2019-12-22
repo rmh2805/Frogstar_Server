@@ -1,18 +1,22 @@
 package Server;
 
 public class ServerSingleton {
-    static ServerSingleton server;
+    private static ServerSingleton server;
 
     public static void main(String[] args) {
-
+        initialize();
+        //Spawn acceptor and handler threads
     }
 
     public static void initialize() {
         server = new ServerSingleton();
     }
 
+    public ServerSingleton getServer() {
+        return server;
+    }
 
-    public ServerSingleton() {
+    private ServerSingleton() {
 
     }
 }
