@@ -1,5 +1,7 @@
 package Server;
 
+import Protocols.FrogstarMessage;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -27,5 +29,25 @@ public class UserState {
 
     public String getName() {
         return name;
+    }
+
+    public String getMessage () {
+        if(networkIn.hasNextLine())
+            return null;
+
+        String str = networkIn.nextLine().trim();
+
+        if(str.isEmpty())
+            return null;
+
+        return str;
+    }
+
+    public void sendMessage(FrogstarMessage msg) {
+        if(msg == null)
+            return;
+
+        networkOut.println(msg.toString().trim());
+        networkOut.flush();
     }
 }
