@@ -17,6 +17,9 @@ public class FrogstarProtocol {
 
     //============================<Shared Headers>============================//
 
+    //=================================<Misc>=================================//
+    public static final String nameRegex = "^[a-zA-Z0-9]+$";
+
     //=========================<String Manipulation>==========================//
 
     /**
@@ -47,5 +50,10 @@ public class FrogstarProtocol {
     public static String desanitizeString (String str) {
         str = str.replace(lineBreak, "\n");
         return str;
+    }
+
+
+    public static boolean nameValid (String name) {
+        return name.matches(nameRegex);
     }
 }

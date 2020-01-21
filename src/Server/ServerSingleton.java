@@ -2,11 +2,15 @@ package Server;
 
 import Errors.BadName;
 import Protocols.FrogstarMessage;
+import Protocols.FrogstarProtocol;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Collections.synchronizedList;
+import static java.util.Collections.synchronizedMap;
 
 public class ServerSingleton {
     private static ServerSingleton server;
@@ -37,8 +41,8 @@ public class ServerSingleton {
     //=====================================<Instance Methods>=====================================//
     //============================================================================================//
     public ServerSingleton() {
-        tempUsers = new LinkedList<>();
-        userMap = new HashMap<>();
+        tempUsers = synchronizedList( new LinkedList<>());
+        userMap = synchronizedMap(new HashMap<>());
     }
 
     //==================================<Modify the User list>====================================//
@@ -107,5 +111,11 @@ public class ServerSingleton {
         }
     }
 
+    //======================================<Name Checking>=======================================//
+    public boolean nameLegal (String name) {
+        if(FrogstarProtocol.nameValid(name))
+            return !userMap.containsKey(name);
+        return false;
+    }
 
 }
