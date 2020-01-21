@@ -3,7 +3,6 @@ package Server;
 import Errors.BadName;
 import Protocols.FrogstarMessage;
 
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,8 +66,7 @@ public class ServerSingleton {
      * @param name The name of the user to remove
      */
     public void removeUser (String name) {
-        if(userMap.containsKey(name))
-            userMap.remove(name);
+        userMap.remove(name);
     }
 
     /**
@@ -76,8 +74,7 @@ public class ServerSingleton {
      * @param user The user to drop
      */
     public void dropUser(UserState user) {
-        if(tempUsers.contains(user))
-            tempUsers.remove(user);
+        tempUsers.remove(user);
     }
 
     //=====================================<Message Passing>======================================//

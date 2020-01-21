@@ -16,7 +16,12 @@ public class HandlerThread implements Runnable {
 
     @Override
     public void run() {
+        //You've been spawned, negotiate a name for your user
 
+
+        //You've got a name, do regular command things
+
+        //Your user is logging off, do cleanup
     }
 
 
