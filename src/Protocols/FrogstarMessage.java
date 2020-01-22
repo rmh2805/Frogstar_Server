@@ -1,5 +1,7 @@
 package Protocols;
 
+import static Protocols.FrogstarProtocol.catStrings;
+
 public class FrogstarMessage {
     private String head;
     private String body;
@@ -9,16 +11,30 @@ public class FrogstarMessage {
         this.body = body;
     }
 
+    /**
+     * Returns the head (tag) of the command
+     *
+     * @return The head/tag of the command
+     */
     public String getHead() {
         return head;
     }
 
+    /**
+     * Returns the body of the command
+     *
+     * @return The body of the command
+     */
     public String getBody() {
         return body;
     }
 
-    @Override
+    /**
+     * Returns the catted and sanitized head and body
+     *
+     * @return The catted and sanitized head and body
+     */
     public String toString() {
-        return FrogstarProtocol.catStrings(head, body);
+        return FrogstarProtocol.sanitizeString(FrogstarProtocol.catStrings(head, body));
     }
 }

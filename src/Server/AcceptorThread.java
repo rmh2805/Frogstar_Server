@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class AcceptorThread implements Runnable {
-    ServerSocket serverSocket;
+    private ServerSocket serverSocket;
 
     public AcceptorThread(int port) {
         try {
@@ -21,7 +21,7 @@ public class AcceptorThread implements Runnable {
     public void run() {
         while (ServerSingleton.getServer().isRunning()) {
             if (ServerSingleton.getServer().numUsers() < FrogstarProtocol.maxUsers) {
-                UserState newUser = null;
+                UserState newUser;
                 try {
                     Socket newSocket = serverSocket.accept();
                     newUser = new UserState(newSocket);

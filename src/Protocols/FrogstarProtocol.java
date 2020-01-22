@@ -24,7 +24,7 @@ public class FrogstarProtocol {
     //============================<Shared Headers>============================//
 
     //=================================<Misc>=================================//
-    public static final String nameRegex = "^[a-zA-Z0-9]+$";
+    public static final String nameRegex = "^[a-zA-Z0-9_]+$";
 
     //=========================<String Manipulation>==========================//
 
@@ -58,7 +58,14 @@ public class FrogstarProtocol {
         return str;
     }
 
+    //==========================<Misc Functionality>==========================//
 
+    /**
+     * Checks if the name's format is valid (alphanumerics/underscores, at least one char)
+     *
+     * @param name The name to check for formatting
+     * @return If the specified name is valid
+     */
     public static boolean nameValid (String name) {
         return name.matches(nameRegex);
     }

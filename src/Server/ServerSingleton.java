@@ -13,14 +13,14 @@ import static java.util.Collections.synchronizedMap;
 
 public class ServerSingleton {
     private static ServerSingleton server;
-    private static List<HandlerThread> handlerPool;
+    private static List<HandlerThread> handlerPool; //This is only updated by the acceptor thread
 
     public static void main(String[] args) {
         initialize();
 
         AcceptorThread acceptor = new AcceptorThread(FrogstarProtocol.port);
 
-
+        //todo More work here
     }
 
     public static void initialize() {
@@ -40,11 +40,25 @@ public class ServerSingleton {
         return server;
     }
 
+    /**
+     * Adds a new handler thread to the handler pool
+     *
+     * @param handler The handler to add to the pool
+     */
     public static void addHandler(HandlerThread handler) {
+        if (handler == null)
+            return;
+
         handlerPool.add(handler);
     }
 
+    /**
+     * Remove a handler from the pool
+     *
+     * @param handler The handler to remove from the pool
+     */
     public static void removeHandler(HandlerThread handler) {
+        //todo Ensure the handler is not executing
         handlerPool.remove(handler);
     }
 
@@ -85,6 +99,11 @@ public class ServerSingleton {
         return tempUsers.size() + userMap.size();
     }
 
+    /**
+     * Returns whether or not the server is properly running
+     *
+     * @return Whether or not the server is running
+     */
     boolean isRunning() {
         return this.isRunning;
     }
@@ -170,8 +189,15 @@ public class ServerSingleton {
     }
 
     //======================================<Name Checking>=======================================//
-    public boolean nameLegal (String name) {
-        if(FrogstarProtocol.nameValid(name))
+
+    /**
+     * Determines if a given username is valid and available
+     *
+     * @param name The name to check
+     * @return Whether or not the given username is valid and available
+     */
+    public boolean nameLegal(String name) {
+        if (FrogstarProtocol.nameValid(name))
             return !userMap.containsKey(name);
         return false;
     }

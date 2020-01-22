@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class HandlerThread implements Runnable {
+    //This is the one-thread-per-user version
     private UserState user;
 
 
