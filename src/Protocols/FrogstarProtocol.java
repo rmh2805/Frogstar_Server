@@ -1,14 +1,20 @@
 package Protocols;
 
 public class FrogstarProtocol {
+    public static final int maxUsers = 10;
+    public static final int port = 5526;
+
     public static final String separator = "::";
     public static final String lineBreak = ":n:";
 
     //=========================<Headers From Client>==========================//
     public static final String claimHead = "ClaimName";
+    public static final String logOffHead = "LogOff";
 
     //=========================<Headers From Server>==========================//
     public static final String acceptNameHead = "AcceptName";
+    public static final String loggedOffHead = "LoggedOff";
+    public static final String loggedOnHead = "LoggedOn";
 
     //============================<Server Errors>=============================//
     public static final String nameTakenHead = "NameTaken";
