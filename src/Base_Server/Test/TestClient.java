@@ -12,18 +12,20 @@ public class TestClient {
 
     public static void main(String[] args) throws IOException {
         ClientInterface clientInterface = null;
-        if(args.length >= 1) {
+        if(args.length == 1) {
             //This is the "server" side
             System.out.println("Server Side");
-            ServerSocket serverSocket = new ServerSocket(5526);
+            ServerSocket serverSocket = new ServerSocket(Integer.parseInt(args[1]));
             clientInterface = new ClientInterface(serverSocket.accept());
             serverSocket.close();
-        } else {
+        } else if(args.length >= 2) {
             System.out.println("Client Side");
-            clientInterface = new ClientInterface("localHost", 5526);
+            clientInterface = new ClientInterface(args[0], Integer.parseInt(args[1]));
             Command fibStart = new Command(fibTag, "0,1");
             System.out.println("-> " + fibStart.toString() + "\n");
             clientInterface.sendCommand(fibStart);
+        } else {
+            System.exit(1);
         }
 
         int num = -1;
