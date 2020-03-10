@@ -15,7 +15,7 @@ public class TestClient {
         if(args.length == 1) {
             //This is the "server" side
             System.out.println("Server Side");
-            ServerSocket serverSocket = new ServerSocket(Integer.parseInt(args[1]));
+            ServerSocket serverSocket = new ServerSocket(Integer.parseInt(args[0]));
             clientInterface = new ClientInterface(serverSocket.accept());
             serverSocket.close();
         } else if(args.length >= 2) {
