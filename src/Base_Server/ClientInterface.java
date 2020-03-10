@@ -27,12 +27,12 @@ public class ClientInterface {
         socket.close();
     }
 
-    public void sendCommand(Command command) {
+    public synchronized void sendCommand(Command command) {
         netOut.println(command.encode());
         netOut.flush();
     }
 
-    public Command getCommand() {
+    public synchronized Command getCommand() {
         if (!netIn.hasNextLine()) {
             return null;
         }

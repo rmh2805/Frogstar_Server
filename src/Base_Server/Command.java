@@ -10,6 +10,8 @@ public class Command {
     private List<String> targets;
     private String payload;
 
+    public static final String failedCommandTag = "fail";
+
     //=============================================<Replacement Strings>==============================================//
     private static final String commaReplacement = ":c:";
     private static final String closeBracketReplacement = ":cb:";
