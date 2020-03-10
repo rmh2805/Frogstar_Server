@@ -1,12 +1,10 @@
-package Base_Server;
+package Base_Server.Test;
+
+import Base_Server.Command;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
-import static Base_Server.Command.decodeCommand;
-
-public class Test {
+public class TestCommand {
 
     public static void main(String[] args) {
         String tag = "foo";
