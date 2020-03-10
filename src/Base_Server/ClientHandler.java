@@ -35,6 +35,8 @@ public class ClientHandler implements Runnable {
         this.clientInterface = clientInterface;
         running = true;
         this.server = server;
+
+        this.clientInterface.sendCommand(new Command(Command.idTag, id + ""));
     }
 
     public void sendCommand(Command command) {

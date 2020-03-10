@@ -11,40 +11,50 @@ public class Server {
 
     private ServerSocket serverSocket;
 
-    public static void main(String[] args) throws IOException {
-        Server server = new Server(Integer.parseInt(args[0]));
-        while(true) {
-            server.getUsers();
-        }
-    }
-
-    public void getUsers() throws IOException {
+    /**
+     * Accepts an incoming connection, creates a new handler for it, and then starts a thread for it.
+     */
+    public void acceptUsers() {
         Socket socket = null;
         try {
             socket = serverSocket.accept();
         } catch (IOException e) {
             return;
         }
+
         ClientInterface clientInterface;
         try {
             clientInterface = new ClientInterface(socket);
         } catch (IOException e) {
-            socket.close();
+            try {
+                socket.close();
+            } catch (IOException ignored) {
+            }
+
             return;
         }
 
-        ClientHandler handler = addHandler(clientInterface);
-        new Thread(handler).start();
+        addHandler(clientInterface);
     }
 
+    /**
+     * Create and initialize a new Server instance
+     *
+     * @param port The port to open on
+     * @throws IOException Thrown if we fail to open the server socket
+     */
     public Server(int port) throws IOException {
         nextId = 0;
         clients = Collections.synchronizedMap(new HashMap<Integer, ClientHandler>());
 
         serverSocket = new ServerSocket(port);
-
     }
 
+    /**
+     * Returns the next free Id to assign to the newest user
+     *
+     * @return The next free Id
+     */
     private Integer getNextId() {
         nextId += 1;
         return nextId - 1;
@@ -55,11 +65,11 @@ public class Server {
      *
      * @param clientInterface The interface for the new handler
      */
-    private synchronized ClientHandler addHandler(ClientInterface clientInterface) {
+    private synchronized void addHandler(ClientInterface clientInterface) {
         Integer id = getNextId();
         ClientHandler handler = new ClientHandler(id, clientInterface, this);
         clients.put(id, handler);
-        return handler;
+        new Thread(handler).start();
     }
 
     /**
@@ -71,9 +81,15 @@ public class Server {
      * @return Whether or not the command was sent to anyone
      */
     public boolean executeCommand(int id, Command command) {
-        List<Integer> targets = new LinkedList<>();
-        for (String target : command.getTargets()) {
-            targets.add(Integer.valueOf(target));
+        List<Integer> targets = null;
+        if (command.getTargets().size() > 1) {
+            targets = new LinkedList<>();
+            for (String target : command.getTargets()) {
+                targets.add(Integer.valueOf(target));
+            }
+        }
+        else {
+            targets = new LinkedList<>(clients.keySet());
         }
 
         List<String> senders = new LinkedList<>();

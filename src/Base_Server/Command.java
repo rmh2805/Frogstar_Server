@@ -11,6 +11,7 @@ public class Command {
     private String payload;
 
     public static final String failedCommandTag = "fail";
+    public static final String idTag = "id";
 
     //=============================================<Replacement Strings>==============================================//
     private static final String commaReplacement = ":c:";
@@ -87,13 +88,16 @@ public class Command {
 
     public Command(String tag, List<String> targets, String payload) {
         this.tag = tag;
-        this.targets = new LinkedList<>(targets);
+        if(targets == null)
+            this.targets = new LinkedList<>();
+        else
+            this.targets = new LinkedList<>(targets);
         this.payload = payload;
     }
 
 
     public Command(String tag, String payload) {
-        this(tag, new LinkedList<>(), payload);
+        this(tag, null, payload);
     }
 
     public String getTag() {
