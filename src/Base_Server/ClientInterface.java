@@ -10,6 +10,7 @@ public class ClientInterface {
 
     private Scanner netIn;
     private PrintWriter netOut;
+    private boolean running;
 
     public ClientInterface(String host, int port) throws IOException {
         this(new Socket(host, port));
@@ -19,9 +20,12 @@ public class ClientInterface {
         this.socket = socket;
         netIn = new Scanner(socket.getInputStream());
         netOut = new PrintWriter(socket.getOutputStream());
+        this.running = true;
     }
 
     public void stop() throws IOException {
+        this.running = false;
+
         netIn = null;
         netOut = null;
         socket.close();
@@ -33,7 +37,7 @@ public class ClientInterface {
     }
 
     public synchronized Command getCommand() {
-        if (!netIn.hasNextLine()) {
+        if (!netIn.hasNextLine() || !running) {
             return null;
         }
         return Command.decodeCommand(netIn.nextLine());

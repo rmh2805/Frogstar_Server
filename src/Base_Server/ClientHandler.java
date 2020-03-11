@@ -12,7 +12,11 @@ public class ClientHandler implements Runnable {
     public void run() {
         while(running) {
             Command nextCommand = clientInterface.getCommand();
-            while(nextCommand == null) nextCommand = clientInterface.getCommand();
+            while(nextCommand == null) {
+                nextCommand = clientInterface.getCommand();
+                if(!running) break;
+            }
+            if(nextCommand == null) break;
 
             if(!server.executeCommand(this.id, nextCommand)) {
                 this.clientInterface.sendCommand(new Command(Command.failedCommandTag, nextCommand.toString()));
