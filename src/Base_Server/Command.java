@@ -12,6 +12,7 @@ public class Command {
 
     public static final String failedCommandTag = "fail";
     public static final String idTag = "id";
+    public static final String stopTag = "Stahp";
 
     //=============================================<Replacement Strings>==============================================//
     private static final String commaReplacement = ":c:";

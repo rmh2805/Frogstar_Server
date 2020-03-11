@@ -5,11 +5,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.*;
 
-public class Server {
+public class Server implements Runnable {
     private Map<Integer, ClientHandler> clients;
     private Integer nextId;
 
+    private boolean continueRunning;
+    private boolean doPrint;
+
     private ServerSocket serverSocket;
+
 
     /**
      * Accepts an incoming connection, creates a new handler for it, and then starts a thread for it.
@@ -41,13 +45,21 @@ public class Server {
      * Create and initialize a new Server instance
      *
      * @param port The port to open on
+     * @param doPrint Should I print on execution
      * @throws IOException Thrown if we fail to open the server socket
      */
-    public Server(int port) throws IOException {
-        nextId = 0;
-        clients = Collections.synchronizedMap(new HashMap<Integer, ClientHandler>());
+    public Server(int port, boolean doPrint) throws IOException {
+        this.nextId = 0;
 
-        serverSocket = new ServerSocket(port);
+        this.clients = Collections.synchronizedMap(new HashMap<Integer, ClientHandler>());
+        this.serverSocket = new ServerSocket(port);
+
+        this.continueRunning = true;
+        this.doPrint = doPrint;
+    }
+
+    public Server(int port) throws IOException {
+        this(port, true);
     }
 
     /**
@@ -67,6 +79,9 @@ public class Server {
      */
     private synchronized void addHandler(ClientInterface clientInterface) {
         Integer id = getNextId();
+
+        if(doPrint) System.out.println("Added a new user with id " + id);
+
         ClientHandler handler = new ClientHandler(id, clientInterface, this);
         clients.put(id, handler);
         new Thread(handler).start();
@@ -106,5 +121,28 @@ public class Server {
 
 
         return sentCommand;
+    }
+
+    public void stop() throws IOException {
+        //Mark the acceptor loop to stop repeating
+        continueRunning = false;
+
+        //Throw a new connection at the acceptor thread to have it drop out of its accept wait
+        Socket breakAccept = new Socket("127.0.0.1", serverSocket.getLocalPort());
+        breakAccept.close();    //Close the loop breaker
+    }
+
+    @Override
+    public void run() {
+        if(doPrint) System.out.println("Server open on local port " + serverSocket.getLocalPort());
+
+        while(continueRunning) {
+            acceptUsers();
+        }
+
+        // Now that we're done, Close out all of your clients
+        for(Integer id: clients.keySet()) {
+            clients.get(id).stop();
+        }
     }
 }

@@ -48,6 +48,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void stop() {
+        sendCommand(new Command(Command.stopTag, "fromServer"));
         this.running = false;
     }
 }

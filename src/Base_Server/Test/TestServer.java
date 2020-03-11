@@ -3,6 +3,7 @@ package Base_Server.Test;
 import Base_Server.Server;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class TestServer {
     public static void main(String[] args) throws IOException {
@@ -15,12 +16,11 @@ public class TestServer {
 
     public static void testServer(String[] args) throws IOException {
         Server server = new Server(Integer.parseInt(args[0]));
-        System.out.println("Server opened on port " + args[0]);
+        Scanner consoleIn = new Scanner(System.in);
+        new Thread(server).start();
 
-        while(true) {
-            server.acceptUsers();
-            System.out.println("Accepted a new user");
-        }
+        while(!consoleIn.nextLine().strip().toLowerCase().equals("quit"));
+        server.stop();
     }
 
     public static void testClient(String[] args) throws IOException {

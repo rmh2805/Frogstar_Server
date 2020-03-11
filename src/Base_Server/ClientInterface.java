@@ -36,7 +36,6 @@ public class ClientInterface {
         if (!netIn.hasNextLine()) {
             return null;
         }
-
         return Command.decodeCommand(netIn.nextLine());
     }
 
