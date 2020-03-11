@@ -96,6 +96,9 @@ public class Server implements Runnable {
      * @return Whether or not the command was sent to anyone
      */
     public boolean executeCommand(Integer id, Command command) {
+        //todo check to drop leaving users
+        if (doPrint) System.out.println(command);
+
         List<Integer> targets = null;
         if (command.getTargets().size() > 1) {
             targets = new LinkedList<>();

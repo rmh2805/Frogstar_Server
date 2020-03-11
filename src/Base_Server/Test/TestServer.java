@@ -27,6 +27,7 @@ public class TestServer {
     public static void testClient(String[] args) throws IOException {
         try {
             SimpleClient simpleClient = new SimpleClient(args[0], Integer.parseInt(args[1]));
+            new Thread(simpleClient).start();
         } catch (Exception e) {
             System.err.println("Failed to connect to server at " + args[0] + ":" + args[1]);
         }
