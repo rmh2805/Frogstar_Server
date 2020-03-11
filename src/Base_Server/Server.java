@@ -6,19 +6,19 @@ import java.net.Socket;
 import java.util.*;
 
 public class Server implements Runnable {
-    private Map<Integer, ClientHandler> clients;
-    private Integer nextId;
+    protected Map<Integer, ClientHandler> clients;
+    protected Integer nextId;
 
-    private boolean continueRunning;
-    private boolean doPrint;
+    protected ServerSocket serverSocket;
 
-    private ServerSocket serverSocket;
+    protected boolean continueRunning;
+    protected boolean doPrint;
 
 
     /**
      * Accepts an incoming connection, creates a new handler for it, and then starts a thread for it.
      */
-    public void acceptUsers() {
+    protected void acceptUsers() {
         Socket socket = null;
         try {
             socket = serverSocket.accept();
@@ -44,7 +44,7 @@ public class Server implements Runnable {
     /**
      * Create and initialize a new Server instance
      *
-     * @param port The port to open on
+     * @param port    The port to open on
      * @param doPrint Should I print on execution
      * @throws IOException Thrown if we fail to open the server socket
      */
@@ -67,7 +67,7 @@ public class Server implements Runnable {
      *
      * @return The next free Id
      */
-    private Integer getNextId() {
+    protected Integer getNextId() {
         nextId += 1;
         return nextId - 1;
     }
@@ -77,10 +77,10 @@ public class Server implements Runnable {
      *
      * @param clientInterface The interface for the new handler
      */
-    private synchronized void addHandler(ClientInterface clientInterface) {
+    protected synchronized void addHandler(ClientInterface clientInterface) {
         Integer id = getNextId();
 
-        if(doPrint) System.out.println("Added a new user with id " + id);
+        if (doPrint) System.out.println("Added a new user with id " + id);
 
         ClientHandler handler = new ClientHandler(id, clientInterface, this);
         clients.put(id, handler);
@@ -95,7 +95,7 @@ public class Server implements Runnable {
      * @param command The command to execute
      * @return Whether or not the command was sent to anyone
      */
-    public boolean executeCommand(int id, Command command) {
+    public boolean executeCommand(Integer id, Command command) {
         List<Integer> targets = null;
         if (command.getTargets().size() > 1) {
             targets = new LinkedList<>();
@@ -123,8 +123,12 @@ public class Server implements Runnable {
         return sentCommand;
     }
 
+    /**
+     * Sets volatile flag false and creates a new connection to break the exception route
+     *
+     * @throws IOException If creating the new socket fails
+     */
     public void stop() throws IOException {
-        //Mark the acceptor loop to stop repeating
         continueRunning = false;
 
         //Throw a new connection at the acceptor thread to have it drop out of its accept wait
@@ -132,17 +136,22 @@ public class Server implements Runnable {
         breakAccept.close();    //Close the loop breaker
     }
 
+
+    /**
+     * Accepts new users until stop is called on another thread. Then closes outs all active connections
+     */
     @Override
     public void run() {
-        if(doPrint) System.out.println("Server open on local port " + serverSocket.getLocalPort());
+        if (doPrint) System.out.println("Server open on local port " + serverSocket.getLocalPort());
 
-        while(continueRunning) {
+        while (continueRunning) {
             acceptUsers();
         }
 
         // Now that we're done, Close out all of your clients
-        for(Integer id: clients.keySet()) {
+        for (Integer id : clients.keySet()) {
             clients.get(id).stop();
         }
     }
+
 }

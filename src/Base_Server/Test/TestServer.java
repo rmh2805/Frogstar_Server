@@ -1,6 +1,7 @@
 package Base_Server.Test;
 
 import Base_Server.Server;
+import Base_Server.SimpleClient;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -24,6 +25,10 @@ public class TestServer {
     }
 
     public static void testClient(String[] args) throws IOException {
-
+        try {
+            SimpleClient simpleClient = new SimpleClient(args[0], Integer.parseInt(args[1]));
+        } catch (Exception e) {
+            System.err.println("Failed to connect to server at " + args[0] + ":" + args[1]);
+        }
     }
 }

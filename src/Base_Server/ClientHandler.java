@@ -12,9 +12,8 @@ public class ClientHandler implements Runnable {
     public void run() {
         while(running) {
             Command nextCommand = clientInterface.getCommand();
-            while(nextCommand == null) {
+            while(nextCommand == null && running) {
                 nextCommand = clientInterface.getCommand();
-                if(!running) break;
             }
             if(nextCommand == null) break;
 
