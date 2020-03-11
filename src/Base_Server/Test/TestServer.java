@@ -15,9 +15,11 @@ public class TestServer {
 
     public static void testServer(String[] args) throws IOException {
         Server server = new Server(Integer.parseInt(args[0]));
+        System.out.println("Server opened on port " + args[0]);
 
         while(true) {
             server.acceptUsers();
+            System.out.println("Accepted a new user");
         }
     }
 
