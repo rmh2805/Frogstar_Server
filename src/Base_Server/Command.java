@@ -18,6 +18,8 @@ public class Command {
     private static final String commaReplacement = ":c:";
     private static final String closeBracketReplacement = ":cb:";
     private static final String apostropheReplacement = ":a:";
+    private static final String newlineReplacement = ":nl:";
+    private static final String returnReplacement = ":cr:";
 
     private static String getSubstring(String str, char startCh, char endCh) {
         int startIdx = str.indexOf(startCh);
@@ -33,6 +35,8 @@ public class Command {
         if (str == null) return null;
 
         String cleanStr = str.replaceAll(",", commaReplacement);
+        cleanStr = cleanStr.replaceAll("\n", newlineReplacement);
+        cleanStr = cleanStr.replaceAll("\r", returnReplacement);
         cleanStr = cleanStr.replaceAll("]", closeBracketReplacement);
         return cleanStr.replaceAll("'", apostropheReplacement);
     }
@@ -41,6 +45,8 @@ public class Command {
         if (cleanStr == null) return null;
 
         String str = cleanStr.replaceAll(commaReplacement, ",");
+        str = str.replaceAll(newlineReplacement, "\n");
+        str = str.replaceAll(returnReplacement, "\r");
         str = str.replaceAll(closeBracketReplacement, "]");
         return str.replaceAll(apostropheReplacement, "'");
     }
@@ -89,7 +95,7 @@ public class Command {
 
     public Command(String tag, List<String> targets, String payload) {
         this.tag = tag;
-        if(targets == null)
+        if (targets == null)
             this.targets = new LinkedList<>();
         else
             this.targets = new LinkedList<>(targets);
@@ -99,6 +105,10 @@ public class Command {
 
     public Command(String tag, String payload) {
         this(tag, null, payload);
+    }
+
+    public Command(String tag) {
+        this(tag, null, "");
     }
 
     public String getTag() {
